@@ -8,11 +8,14 @@
 		//La nota del examen
 		private $nota;
 
-		//Redefinimos el constructor de la clase para añadir la fecha en el momento de la creacción y por defecto la nota
-		//será 0, si no se llegara a realizar el examen esa sería la calificación
-		public function __construct($fecha){
+		private $asignatura;
+
+		//Redefinimos el constructor de la clase para añadir la fecha en el momento de la creacción
+		
+		public function __construct($fecha, $nota, $asignatura){
 			$this->set_fecha($fecha);
-			$this->calificar_examen(0);
+			$this->set_nota($nota);
+			$this->set_asignatura($asignatura);
 		}
 
 		public function set_fecha($fecha){
@@ -23,7 +26,7 @@
 			return $this->fecha;
 		}
 
-		public function calificar_examen($nota){
+		public function set_nota($nota){
 			$error =  "";
 			if($nota>=0 && $nota<=10){
 				$this->nota=$nota;
@@ -39,8 +42,16 @@
 			return $this->nota;
 		}
 
+		public function set_asignatura($asignatura){
+			$this->asignatura = $asignatura;
+		}
+
+		public function get_asignatura(){
+			return $this->asignatura;
+		}
+
 		public function __tostring(){
-			return "Fecha: ".$this->get_fecha()."<br />Calificación: ".$this->get_nota();
+			return $this->get_asignatura()."Fecha: ".$this->get_fecha()."<br />Calificación: ".$this->get_nota()."<br />";
 
 		}
 	}

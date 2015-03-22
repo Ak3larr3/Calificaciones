@@ -39,11 +39,10 @@
 		public function __tostring(){
 			$retorno = "Alumnos matriculados en el curso ".$this->get_nombre()."<br />";
 			if($this->alumnos_inscritos() == 0){
-				$retorno = "No hay alumnos inscritos en el curso.";
-			}else{
-				$retorno = "Alumno:<br />";
+				$retorno .= "No hay alumnos inscritos en el curso.";
+			}else{				
 				foreach ($this->alumnos as $alumno_inscrito) {
-					$retorno .= $alumno_inscrito->__tostring()."<br />";
+					$retorno .= $alumno_inscrito."<br /><br />";
 				}
 			}
 			return $retorno;

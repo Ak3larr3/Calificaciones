@@ -14,6 +14,7 @@
 		//Los alumnos pueden matricularse en varias asignaturas así que usamos un array de objetos Asignatura
 		//Para nombres de variables array se suele usar el plural porque almacena varios elementos
 		private $asignaturas;
+		private $examenes;
 
 
 		//Métodos de la clasem Alumno, aquí definimos las acciones que un alumno puede realizar
@@ -26,7 +27,8 @@
 			$this->set_nombre($nombre);
 			$this->set_apellidos($apellidos);
 			$this->set_dni($dni);
-			$this->asignaturas = array();			
+			$this->asignaturas = array();
+			$this->examenes = array();
 		}
 
 		//Establece como nombre del alumno el que le pasamos en el parametro $nombre
@@ -111,6 +113,50 @@
 			return count($this->asignaturas);
 		}
 
+		//Añade examenes, le pasamos como parametro el examen
+		public function incluir_examen($examen){
+			//Añade el examen en la última posición del array
+			$this->examenes[]=$examen;
+		}
+
+		public function buscar_examen($fecha){
+			$exame_buscado = null;
+
+			foreach ($this->examenes as $examen_realizado) {
+				if(strcmp($examen_realizado->get_fecha(), $fecha) == 0){
+					$examen_buscado = $examen_realizado;
+				}
+			}
+			return $examen_buscado;
+		}
+
+		//Nos devuelve la media de las notas de los examenes
+		public function promedio($asignatura){
+			
+			$suma_notas=0;
+			$numero_exmanes=0;
+
+			foreach ($this->examenes as $examen_realizado) {
+				if(strcmp($examen_realizado->get_asignatura(), $asignatura) == 0){
+					$suma_notas+=$examen_realizado->get_nota();
+					$numero_exmanes++;
+				}			
+			}
+			
+			//Si no se han realizado examenes forzamos la división para que el resultado sea -1, así podremos usar este
+			//resultado a modo de mensaje de error
+			if($numero_exmanes==0){
+				$numero_exmanes=-1;
+				$suma_notas=1;
+			}
+			//Dividimos la suma de todas las notas por el número total de examenes pera obtener la media
+			return ($suma_notas/$numero_exmanes);
+		}
+
+		public function examenes_realizados(){
+			return count($this->examenes);
+		}
+
 		//Devuelve un string con todos los datos del alumno
 		public function __tostring(){
 			$retorno = "Alumno: ".$this->get_nombre()." ".$this->get_apellidos()." DNI: ".$this->get_dni()."<br />";
@@ -119,7 +165,16 @@
 			}else{
 				$retorno .= "Asignaturas:<br />";
 				foreach ($this->asignaturas as $asignatura_matriculada) {
-					$retorno .= $asignatura_matriculada."<br />";
+					$retorno .= $asignatura_matriculada;
+				}
+			}
+
+			if($this->examenes_realizados() == 0){
+				$retorno .= "El alumno no ha realizado examenes.";
+			}else{
+				$retorno .= "Examenes:<br />";
+				foreach ($this->examenes as $examen_realizado) {
+					$retorno .= $examen_realizado;
 				}
 			}
 			return $retorno;
